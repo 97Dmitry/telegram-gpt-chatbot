@@ -10,7 +10,9 @@ export class TelegramConfigService implements TelegrafOptionsFactory {
     | Promise<TelegrafModuleOptions>
     | TelegrafModuleOptions {
     return {
-      token: this.configService.get<string>('telegram.key'),
+      token:
+        this.configService.get<string>('telegram.key') ||
+        process.env.TELEGRAM_KEY,
       middlewares: [
         session({
           defaultSession: () => {

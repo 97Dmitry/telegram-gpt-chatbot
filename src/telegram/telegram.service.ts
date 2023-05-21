@@ -37,7 +37,7 @@ export class TelegramService extends Telegraf<Context> {
     private readonly httpService: HttpService,
     private readonly converterService: ConverterService,
   ) {
-    super(configService.get('telegram.key'));
+    super(configService.get('telegram.key') || process.env.TELEGRAM_KEY);
   }
 
   @Start()
@@ -83,6 +83,10 @@ export class TelegramService extends Telegraf<Context> {
 
     this.logger.verbose(answer.total_tokens);
     await context.reply(answerText);
+
+    if ((context.session as Session).messages.length > 10) {
+      context.session = INITIAL_SESSION;
+    }
   }
 
   @On('voice')
@@ -120,6 +124,10 @@ export class TelegramService extends Telegraf<Context> {
       role: 'assistant',
       content: answerText,
     });
+
+    if ((context.session as Session).messages.length > 10) {
+      context.session = INITIAL_SESSION;
+    }
 
     await context.reply(answerText);
   }

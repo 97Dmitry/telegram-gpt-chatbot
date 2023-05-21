@@ -15,7 +15,8 @@ export class GptService {
 
   constructor(private readonly configService: ConfigService) {
     const configuration = new Configuration({
-      apiKey: this.configService.get<string>('openai.key'),
+      apiKey:
+        this.configService.get<string>('openai.key') || process.env.OPENAI_KEY,
     });
 
     this.openAIApi = new OpenAIApi(configuration);
