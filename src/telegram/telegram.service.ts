@@ -3,7 +3,7 @@ import { Command, Ctx, Message, On, Start, Update } from 'nestjs-telegraf';
 import { Scenes, Telegraf } from 'telegraf';
 import { ConfigService } from '@nestjs/config';
 import { GptService } from '../gpt/gpt.service';
-import { allowedUsers } from 'src/common/constants/telegram';
+import { allowedUsers } from '../common/constants/telegram';
 import { createWriteStream, existsSync, mkdirSync } from 'fs';
 import { resolve } from 'path';
 import { HttpService } from '@nestjs/axios';
@@ -37,16 +37,18 @@ export class TelegramService extends Telegraf<Context> {
     private readonly httpService: HttpService,
     private readonly converterService: ConverterService,
   ) {
-    super(configService.get('telegram.key') || process.env.TELEGRAM_KEY);
+    super(configService.get('telegram.key'));
   }
 
   @Start()
   async onStart(@Ctx() context: Context) {
     await context.reply("It's gpt bot");
+    context.session = INITIAL_SESSION;
   }
 
   @Command('new')
   async clearSession(@Ctx() context: Context) {
+    await context.reply('Сессия сброшена');
     context.session = INITIAL_SESSION;
   }
 

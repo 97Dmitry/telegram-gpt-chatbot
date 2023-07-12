@@ -15,7 +15,5 @@ import { ConverterModule } from './common/converter/converter.module';
     TelegramModule,
     ConverterModule,
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule {}
